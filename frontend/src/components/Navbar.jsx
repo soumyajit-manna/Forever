@@ -32,7 +32,6 @@ const Navbar = () => {
   const navLinkClass = `flex flex-col items-center gap-1 text-sm font-medium text-gray-700 hover:text-pink-500 transition`;
 
   const handleSearchToggle = () => {
-    // Only toggle on /collection route
     if (location.pathname.includes("collection")) {
       setShowSearch((prev) => !prev);
     } else {
@@ -55,7 +54,6 @@ const Navbar = () => {
           { path: "/collection", label: "COLLECTION" },
           { path: "/about", label: "ABOUT" },
           { path: "/contact", label: "CONTACT" },
-          { path: "/admin", label: "ADMIN PANEL" },
         ].map(({ path, label }) => (
           <NavLink
             to={path}
@@ -74,11 +72,22 @@ const Navbar = () => {
             )}
           </NavLink>
         ))}
+
+        {/* External Admin Panel */}
+        <li className={`${navLinkClass}`}>
+          <a
+            href="https://forever-admin-seven-lovat.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-1"
+          >
+            <p>ADMIN PANEL</p>
+          </a>
+        </li>
       </ul>
 
       {/* Icons */}
       <div className="flex items-center gap-6">
-        {/* Search */}
         <img
           onClick={handleSearchToggle}
           src={assets.search_icon}
@@ -86,7 +95,6 @@ const Navbar = () => {
           alt="search"
         />
 
-        {/* Profile Dropdown */}
         <div className="group relative">
           <img
             onClick={() => (token ? null : navigate("/login"))}
@@ -114,7 +122,6 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Cart */}
         <Link to="/cart" className="relative">
           <img
             src={assets.cart_icon}
@@ -126,7 +133,6 @@ const Navbar = () => {
           </p>
         </Link>
 
-        {/* Hamburger */}
         <img
           onClick={() => setVisible(true)}
           src={assets.menu_icon}
@@ -159,7 +165,6 @@ const Navbar = () => {
             { to: "/collection", label: "COLLECTION" },
             { to: "/about", label: "ABOUT" },
             { to: "/contact", label: "CONTACT" },
-            { to: "/admin", label: "ADMIN PANEL" },
           ].map(({ to, label }) => (
             <NavLink
               onClick={() => setVisible(false)}
@@ -170,6 +175,17 @@ const Navbar = () => {
               {label}
             </NavLink>
           ))}
+
+          {/* Admin panel in Sidebar */}
+          <a
+            href="https://forever-admin-seven-lovat.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-4 pl-6 border-b border-gray-100 hover:bg-pink-50 hover:text-pink-600 transition"
+            onClick={() => setVisible(false)}
+          >
+            ADMIN PANEL
+          </a>
         </div>
       </div>
     </div>
