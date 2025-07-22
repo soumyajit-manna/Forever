@@ -48,7 +48,6 @@ const InteractiveLookbook = () => {
             <img
               src={item.image}
               alt={item.title}
-              loading="lazy"
               className="w-full h-[400px] object-cover transform group-hover:scale-110 transition duration-500"
             />
             <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300">
