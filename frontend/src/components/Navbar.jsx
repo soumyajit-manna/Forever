@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { FiGrid, FiX } from "react-icons/fi";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const {
     setShowSearch,
-    showSearch,
     getCartCount,
     navigate,
     token,
@@ -29,8 +29,6 @@ const Navbar = () => {
     return () => document.body.classList.remove("overflow-hidden");
   }, [visible]);
 
-  const navLinkClass = `flex flex-col items-center gap-1 text-sm font-medium text-gray-700 hover:text-pink-500 transition`;
-
   const handleSearchToggle = () => {
     if (location.pathname.includes("collection")) {
       setShowSearch((prev) => !prev);
@@ -41,67 +39,79 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between py-5 font-medium px-2 sm:px-4 border-b border-gray-100 bg-white shadow-sm z-50">
+    <>
+      <div className="site-nav flex items-center justify-between py-5 font-medium px-2 sm:px-4 border-b border-gray-100 bg-white shadow-sm z-50">
       {/* Logo */}
-      <Link to="/">
-        <img src={assets.logo} className="w-36" alt="logo" />
+      <Link to="/" className="site-nav-brand" aria-label="Forever home">
+        <span className="site-nav-wordmark">
+          FOR<span className="wordmark-accent">EVER</span>
+          <span className="wordmark-period">.</span>
+        </span>
       </Link>
 
       {/* Desktop Nav */}
-      <ul className="hidden sm:flex gap-6">
+      <ul className="site-nav-links hidden sm:flex gap-6">
         {[
           { path: "/", label: "HOME" },
           { path: "/collection", label: "COLLECTION" },
           { path: "/about", label: "ABOUT" },
           { path: "/contact", label: "CONTACT" },
-        ].map(({ path, label }) => (
+        ].map(({ path, label }, index) => (
           <NavLink
             to={path}
             key={path}
             className={({ isActive }) =>
-              `${navLinkClass} ${isActive ? "text-pink-600" : ""}`
+              `site-nav-link ${isActive ? "is-active" : ""}`
             }
           >
-            {({ isActive }) => (
-              <>
-                <p>{label}</p>
-                {isActive && (
-                  <hr className="w-2/4 h-[2px] bg-pink-500 rounded-full border-none" />
-                )}
-              </>
-            )}
+            <span className="site-nav-link-number" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="site-nav-link-label">{label}</span>
+            <span className="site-nav-link-arrow" aria-hidden="true">
+              ↗
+            </span>
           </NavLink>
         ))}
 
-        {/* External Admin Panel */}
-        <li className={`${navLinkClass}`}>
-          <a
-            href="https://forever-admin-seven-lovat.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1"
-          >
-            <p>ADMIN PANEL</p>
-          </a>
-        </li>
       </ul>
 
       {/* Icons */}
-      <div className="flex items-center gap-6">
-        <img
+      <div className="site-nav-actions flex items-center gap-6">
+        <a
+          href="https://forever-admin-seven-lovat.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="admin-quick-link nav-icon-button"
+          aria-label="Admin panel"
+        >
+          <FiGrid aria-hidden="true" />
+          <span className="admin-tooltip" role="tooltip">
+            Admin Panel
+          </span>
+        </a>
+        <button
+          type="button"
           onClick={handleSearchToggle}
-          src={assets.search_icon}
-          className="w-5 cursor-pointer hover:opacity-70 transition"
-          alt="search"
-        />
+          className="nav-icon-button"
+          aria-label="Search"
+        >
+          <img src={assets.search_icon} className="nav-action-image" alt="" />
+        </button>
 
-        <div className="group relative">
-          <img
+        <div className="nav-profile group relative">
+          <button
+            type="button"
             onClick={() => (token ? null : navigate("/login"))}
-            className="w-5 cursor-pointer hover:opacity-70 transition"
-            src={assets.profile_icon}
-            alt="profile"
-          />
+            className="nav-icon-button"
+            aria-label="Profile"
+          >
+            <img
+              className="nav-action-image"
+              src={assets.profile_icon}
+              alt=""
+            />
+          </button>
           {token && (
             <div className="hidden group-hover:block absolute right-0 pt-4 z-50">
               <div className="flex flex-col gap-2 w-40 py-4 px-5 bg-white text-gray-600 rounded-xl shadow-lg border border-pink-100">
@@ -122,73 +132,118 @@ const Navbar = () => {
           )}
         </div>
 
-        <Link to="/cart" className="relative">
+        <Link
+          to="/cart"
+          className="nav-icon-button nav-cart-link relative"
+          aria-label={`Shopping cart, ${getCartCount()} items`}
+        >
           <img
             src={assets.cart_icon}
-            className="w-5 hover:opacity-70 transition"
-            alt="cart"
+            className="nav-action-image"
+            alt=""
           />
-          <p className="absolute -right-1 -bottom-1 w-4 h-4 bg-pink-600 text-white text-[8px] rounded-full flex items-center justify-center">
+          <p className="nav-cart-count">
             {getCartCount()}
           </p>
         </Link>
 
-        <img
+        <button
+          type="button"
           onClick={() => setVisible(true)}
-          src={assets.menu_icon}
-          className="w-5 cursor-pointer sm:hidden hover:opacity-70 transition"
-          alt="menu"
-        />
+          className="nav-icon-button nav-menu-button sm:hidden"
+          aria-label="Open menu"
+          aria-expanded={visible}
+          aria-controls="mobile-navigation-drawer"
+        >
+          <img src={assets.menu_icon} className="nav-action-image" alt="" />
+        </button>
+      </div>
+
       </div>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-[60] bg-white transition-all duration-300 ease-in-out shadow-lg ${
-          visible ? "w-full sm:w-2/3" : "w-0"
-        }`}
+        id="mobile-navigation-drawer"
+        className={`site-nav-drawer${visible ? " is-open" : ""}`}
+        aria-hidden={!visible}
       >
-        <div className="h-full overflow-y-auto flex flex-col text-gray-800 text-sm tracking-wide">
-          <div
-            onClick={() => setVisible(false)}
-            className="flex items-center gap-4 p-5 border-b border-gray-100 hover:bg-gray-50"
-          >
-            <img
-              className="h-4 rotate-180"
-              src={assets.dropdown_icon}
-              alt="back"
-            />
-            <p>Back</p>
+        <div className="mobile-drawer-shell">
+          <header className="mobile-drawer-header">
+            <Link
+              to="/"
+              className="mobile-drawer-wordmark"
+              aria-label="Forever home"
+              onClick={() => setVisible(false)}
+            >
+              FOR<span className="wordmark-accent">EVER</span>
+              <span className="wordmark-period">.</span>
+            </Link>
+            <button
+              type="button"
+              className="mobile-drawer-close"
+              aria-label="Close menu"
+              onClick={() => setVisible(false)}
+            >
+              <FiX aria-hidden="true" />
+            </button>
+          </header>
+
+          <div className="mobile-drawer-content">
+            <div className="mobile-drawer-intro">
+              <p className="mobile-drawer-kicker">THE FOREVER EDIT / 01</p>
+              <h2>Where to next?</h2>
+            </div>
+
+            <nav className="mobile-drawer-links" aria-label="Mobile navigation">
+              {[
+                { to: "/", label: "HOME" },
+                { to: "/collection", label: "COLLECTION" },
+                { to: "/about", label: "ABOUT" },
+                { to: "/contact", label: "CONTACT" },
+              ].map(({ to, label }, index) => (
+                <NavLink
+                  onClick={() => setVisible(false)}
+                  to={to}
+                  key={to}
+                  className={({ isActive }) =>
+                    `mobile-drawer-link${isActive ? " is-active" : ""}`
+                  }
+                >
+                  <span className="mobile-drawer-link-number" aria-hidden="true">
+                    0{index + 1}
+                  </span>
+                  <span className="mobile-drawer-link-label">{label}</span>
+                  <span className="mobile-drawer-link-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </NavLink>
+              ))}
+
+              <a
+                href="https://forever-admin-seven-lovat.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mobile-drawer-link mobile-drawer-admin"
+                onClick={() => setVisible(false)}
+              >
+                <span className="mobile-drawer-link-number" aria-hidden="true">
+                  05
+                </span>
+                <span className="mobile-drawer-link-label">ADMIN PANEL</span>
+                <span className="mobile-drawer-link-arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            </nav>
           </div>
 
-          {[
-            { to: "/", label: "HOME" },
-            { to: "/collection", label: "COLLECTION" },
-            { to: "/about", label: "ABOUT" },
-            { to: "/contact", label: "CONTACT" },
-          ].map(({ to, label }) => (
-            <NavLink
-              onClick={() => setVisible(false)}
-              to={to}
-              key={to}
-              className="py-4 pl-6 border-b border-gray-100 hover:bg-pink-50 hover:text-pink-600 transition"
-            >
-              {label}
-            </NavLink>
-          ))}
-
-          {/* Admin panel in Sidebar */}
-          <a
-            href="https://forever-admin-seven-lovat.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="py-4 pl-6 border-b border-gray-100 hover:bg-pink-50 hover:text-pink-600 transition"
-            onClick={() => setVisible(false)}
-          >
-            ADMIN PANEL
-          </a>
+          <footer className="mobile-drawer-footer">
+            <span>GOOD STYLE. GOOD DAYS.</span>
+            <span>FOREVER · 2025</span>
+          </footer>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
