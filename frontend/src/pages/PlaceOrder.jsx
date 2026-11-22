@@ -14,6 +14,7 @@ const PlaceOrder = () => {
     cartItems,
     setCartItems,
     getCartAmount,
+    getCartCount,
     delivery_fee,
     products,
   } = useContext(ShopContext);
@@ -68,6 +69,11 @@ const PlaceOrder = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    if (getCartCount() === 0) {
+      toast.info("Your cart is empty right now. Add an item before placing an order.");
+      return;
+    }
+
     try {
       let orderItems = [];
 
