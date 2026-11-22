@@ -1,45 +1,62 @@
-import React from "react";
-import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
+import { FiArrowUpRight } from "react-icons/fi";
 
 const Footer = () => {
   return (
-    <div>
-      <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm">
-        <div>
-          <img src={assets.logo} className="mb-5 w-32" alt="" />
-          <p className="w-full md:w-2/3 text-gray-600">
-            FOREVER — Your trusted fashion destination.
-            Bringing timeless style since the 1500s, inspired by the legacy of classic design and craftsmanship.
-            From vintage elegance to modern trends, we've got you covered.
-          </p>
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <div className="footer-intro">
+          <div>
+            <p className="footer-eyebrow">THE FOREVER EDIT · 01</p>
+            <h2>
+              Style that <em>stays.</em>
+            </h2>
+          </div>
+          <Link to="/collection" className="footer-cta">
+            <span>EXPLORE THE COLLECTION</span>
+            <FiArrowUpRight aria-hidden="true" />
+          </Link>
         </div>
 
-        <div>
-          <p className="text-xl font-medium mb-5">COMPANY</p>
-          <ul className="flex flex-col gap-1 text-gray-600">
-            <li>Home</li>
-            <li>About us</li>
-            <li>Delivery</li>
-            <li>Privacy policy</li>
-          </ul>
+        <div className="footer-divider" />
+
+        <div className="footer-columns">
+          <div className="footer-brand">
+            <Link to="/" className="footer-wordmark" aria-label="Forever home">
+              FOR<span className="wordmark-accent">EVER</span>
+              <span className="wordmark-period">.</span>
+            </Link>
+            <p>
+              Thoughtful everyday style, made for wherever life takes you.
+              Find the pieces that feel like you.
+            </p>
+            <span className="footer-signoff">MADE TO MOVE WITH YOU</span>
+          </div>
+
+          <nav className="footer-links" aria-label="Footer navigation">
+            <p className="footer-label">EXPLORE</p>
+            <Link to="/">Home</Link>
+            <Link to="/collection">Shop all</Link>
+            <Link to="/about">Our story</Link>
+            <Link to="/contact">Contact</Link>
+          </nav>
+
+          <div className="footer-contact">
+            <p className="footer-label">NEED A HAND?</p>
+            <a href="mailto:mannasoumyajit47@gmail.com">
+              mannasoumyajit47@gmail.com
+            </a>
+            <a href="tel:+919382869803">+91 93828 69803</a>
+            <span>We’re always happy to help.</span>
+          </div>
         </div>
 
-        <div>
-          <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
-          <ul className="flex flex-col gap-1 text-gray-600">
-            <li>+91 9382869803</li>
-            <li>mannasoumyajit47@gmail.com</li>
-          </ul>
+        <div className="footer-bottom">
+          <span>© 2025 FOREVER. ALL RIGHTS RESERVED.</span>
+          <span>GOOD STYLE. GOOD DAYS.</span>
         </div>
       </div>
-
-      <div>
-        <hr />
-        <p className="py-5 text-sm text-center">
-          Copyright 2025 @forever.com - All Right Reserved.
-        </p>
-      </div>
-    </div>
+    </footer>
   );
 };
 
