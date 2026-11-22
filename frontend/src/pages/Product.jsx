@@ -71,106 +71,133 @@ const Product = () => {
   };
 
   return productData ? (
-    <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
-      <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
-        <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
-          <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
+    <main className="product-page">
+      <section className="product-detail-layout">
+        <div className="product-gallery">
+          <div className="product-thumbnails">
             {productData.image.map((item, index) => (
-              <img
-                onClick={() => setImage(item)}
-                src={item}
+              <button
+                type="button"
                 key={index}
-                className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
-                alt=""
-              />
+                onClick={() => setImage(item)}
+                className={`product-thumbnail ${
+                  image === item ? "is-selected" : ""
+                }`}
+                aria-label={`View product image ${index + 1}`}
+                aria-pressed={image === item}
+              >
+                <img src={item} alt="" />
+              </button>
             ))}
           </div>
-          <div className="w-full sm:w-[80%]">
-            <img className="w-full h-auto" src={image} alt="" />
+          <div className="product-featured-image">
+            <img src={image} alt={productData.name} />
           </div>
         </div>
 
-        <div className="flex-1">
-          <h1 className="font-semibold text-2xl mt-2">{productData.name}</h1>
+        <div className="product-information">
+          <p className="product-breadcrumb">
+            THE COLLECTION <span>/</span> {productData.category}
+          </p>
+          <h1>{productData.name}</h1>
 
-          {/* Rating and Share Icons */}
-          <div className="flex items-center gap-2 mt-2">
-            <div className="flex items-center gap-1">
-              <img src={assets.star_icon} alt="" className="w-3.5" />
-              <img src={assets.star_icon} alt="" className="w-3.5" />
-              <img src={assets.star_icon} alt="" className="w-3.5" />
-              <img src={assets.star_icon} alt="" className="w-3.5" />
-              <img src={assets.star_dull_icon} alt="" className="w-3.5" />
-              <p className="pl-2">(122)</p>
+          <div className="product-rating-row">
+            <div className="product-rating">
+              <div className="product-stars" aria-label="Rated 4 out of 5">
+                <img src={assets.star_icon} alt="" />
+                <img src={assets.star_icon} alt="" />
+                <img src={assets.star_icon} alt="" />
+                <img src={assets.star_icon} alt="" />
+                <img src={assets.star_dull_icon} alt="" />
+              </div>
+              <span>(122)</span>
             </div>
 
-            {/* Share and WhatsApp Icons */}
-            <div className="flex gap-3 ml-4 text-xl text-gray-600 cursor-pointer">
-              <FaShareAlt onClick={handleShare} title="Share" />
-              <FaWhatsapp
+            <div className="product-share-actions">
+              <button
+                type="button"
+                onClick={handleShare}
+                title="Share"
+                aria-label="Share product"
+              >
+                <FaShareAlt aria-hidden="true" />
+              </button>
+              <button
+                type="button"
                 onClick={handleWhatsAppShare}
                 title="Share on WhatsApp"
-                className="text-green-600"
-              />
+                aria-label="Share product on WhatsApp"
+              >
+                <FaWhatsapp aria-hidden="true" />
+              </button>
             </div>
           </div>
 
-          <p className="mt-5 text-3xl text-red-600 font-bold">
+          <p className="product-price">
             {currency}
             {productData.price}
           </p>
-          <p className="mt-5 text-gray-600 md:w-4/5">
+          <p className="product-description-copy">
             {productData.description}
           </p>
-          <div className="flex flex-col gap-4 my-8">
-            <p>Select Size</p>
-            <div className="flex gap-2">
-              {productData.sizes.map((item, index) => (
-                <button
-                  onClick={() => setSize(item)}
-                  className={`border py-2 px-4 ${
-                    item === size
-                      ? "border-pink-600 bg-pink-100 font-medium"
-                      : "bg-gray-100 text-gray-700 hover:bg-pink-100 hover:border-pink-500"
-                  }`}
-                  key={index}
-                >
-                  {item}
-                </button>
-              ))}
+          <div className="product-size-select">
+            <p className="product-field-label">CHOOSE YOUR SIZE</p>
+            <div className="product-size-options">
+              {productData.sizes.map((item, index) => {
+                const isSelected = item === size;
+
+                return (
+                  <button
+                    type="button"
+                    onClick={() => setSize(item)}
+                    className={isSelected ? "is-selected" : ""}
+                    key={index}
+                    aria-pressed={isSelected}
+                  >
+                    {item}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <div className="flex gap-4 flex-wrap">
+          <div className="product-purchase-actions">
             <button
+              type="button"
               onClick={handleAddToCart}
-              className="bg-pink-600 hover:bg-pink-700 transition text-white px-8 py-3 text-sm"
+              className="product-add-button"
             >
               ADD TO CART
             </button>
             <button
+              type="button"
               onClick={handleBuyNow}
-              className="bg-white border border-pink-500 text-pink-600 hover:bg-pink-50 transition px-8 py-3 text-sm"
+              className="product-buy-button"
             >
               BUY NOW
             </button>
           </div>
 
-          <hr className="mt-8 sm:w-4/5" />
-          <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
-            <p>✅ 100% Original product.</p>
-            <p>💰 Cash on delivery is available on this product.</p>
-            <p>🔁 Easy return and exchange policy within 7 days.</p>
+          <div className="product-promises">
+            <p>
+              <span>01</span> 100% Original product.
+            </p>
+            <p>
+              <span>02</span> Cash on delivery is available.
+            </p>
+            <p>
+              <span>03</span> Easy return and exchange within 7 days.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="mt-20">
-        <div className="flex">
-          <b className="border px-5 py-3 text-sm">Description</b>
-          <p className="border px-5 py-3 text-sm">Reviews (122)</p>
+      <section className="product-description-panel">
+        <div className="product-description-tabs">
+          <span>DESCRIPTION</span>
+          <span>REVIEWS (122)</span>
         </div>
-        <div className="flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500">
+        <div className="product-description-body">
           <p>
             Welcome to FOREVER. – your ultimate destination for trend-forward
             fashion. Each piece in our collection is thoughtfully curated to
@@ -183,15 +210,15 @@ const Product = () => {
             made for every mood and moment.
           </p>
         </div>
-      </div>
+      </section>
 
       <RelatedProducts
         category={productData.category}
         subCategory={productData.subCategory}
       />
-    </div>
+    </main>
   ) : (
-    <div className="opacity-0"></div>
+    <div className="product-loading" aria-label="Loading product" />
   );
 };
 
