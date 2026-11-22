@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import { useLocation } from "react-router-dom";
@@ -50,42 +50,51 @@ const SearchBar = () => {
   };
 
   return showSearch && visible ? (
-    <div className="border-y bg-pink-50 text-center py-4 relative">
-      {/* Search input box */}
-      <div className="inline-flex items-center justify-center border border-pink-300 px-5 py-2 mx-auto rounded-full w-11/12 sm:w-1/2 shadow-md transition">
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 outline-none bg-inherit text-sm text-pink-900 placeholder-pink-400"
-          type="text"
-          placeholder="Search for products..."
-        />
-        <img
-          onClick={handleMicClick}
-          className={`w-5 ml-3 cursor-pointer transition-transform ${
-            isListening ? "animate-pulse" : ""
-          }`}
-          src={assets.mic_icon}
-          alt="mic"
-          title="Click to speak"
-        />
-        <img
-          className="w-5 ml-3 cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
-          src={assets.search_icon}
-          alt="search"
-          title="Search"
-        />
-      </div>
+    <section className="search-panel" aria-label="Product search">
+      <div className="search-panel-inner">
+        <div className="search-panel-heading">
+          <p>FIND YOUR NEXT FAVORITE</p>
+          <span>SEARCH / 01</span>
+        </div>
 
-      {/* Close icon - only visible on sm and up */}
-      <button
-        onClick={() => setShowSearch(false)}
-        className="absolute top-3 right-5 text-pink-700 hover:scale-110 transition hidden sm:block"
-        aria-label="Close search"
-      >
-        <img src={assets.cross_icon} alt="close" className="w-4" />
-      </button>
-    </div>
+        <div className="search-panel-content">
+          <div className="search-field">
+            <img className="search-field-icon" src={assets.search_icon} alt="" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              type="text"
+              placeholder="Search by name, style, or mood..."
+              aria-label="Search products"
+            />
+            <button
+              type="button"
+              onClick={handleMicClick}
+              className={`search-voice-button ${isListening ? "is-listening" : ""}`}
+              aria-label={isListening ? "Listening for search" : "Search by voice"}
+              aria-pressed={isListening}
+              title="Search by voice"
+            >
+              <img src={assets.mic_icon} alt="" />
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowSearch(false)}
+            className="search-close-button"
+            aria-label="Close search"
+          >
+            <img src={assets.cross_icon} alt="" />
+            <span>CLOSE</span>
+          </button>
+        </div>
+
+        <p className="search-panel-hint">
+          {isListening ? "LISTENING — SAY WHAT YOU’RE LOOKING FOR" : "TYPE TO FILTER THE COLLECTION"}
+        </p>
+      </div>
+    </section>
   ) : null;
 };
 
