@@ -1,82 +1,94 @@
-import React from "react";
-import Title from "../components/Title";
-import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 import NewsletterBox from "../components/NewsletterBox";
+
+const aboutImage =
+  "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=85";
 
 const About = () => {
   return (
-    <div className="px-4 sm:px-6 md:px-12 lg:px-20 text-gray-800 bg-white">
-      {/* ABOUT US TITLE */}
-      <div className="text-center pt-12 sm:pt-14">
-        <Title text1={"ABOUT"} text2={"US"} />
-      </div>
-
-      {/* ABOUT SECTION */}
-      <div className="my-12 sm:my-14 flex flex-col md:flex-row gap-10 md:gap-12 items-center">
-        <img
-          className="w-full max-w-md sm:max-w-lg md:max-w-[480px] rounded-2xl shadow-xl"
-          src={assets.about_img}
-          alt="About Us"
-        />
-        <div className="flex flex-col justify-center gap-4 md:gap-6 w-full md:w-2/4 text-gray-600">
-          <p className="text-base sm:text-lg leading-relaxed">
-            Forever was born out of a passion for innovation and a desire to
-            revolutionize the way people shop online...
-          </p>
-          <p className="text-base sm:text-lg leading-relaxed">
-            Since our inception, we've worked tirelessly to curate a diverse
-            selection of high-quality products...
-          </p>
-          <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">
-            Our Mission
-          </h3>
-          <p className="text-base sm:text-lg leading-relaxed">
-            Our mission at Forever is to empower customers with choice,
-            convenience, and confidence...
-          </p>
-        </div>
-      </div>
-
-      {/* WHY CHOOSE US */}
-      <div className="text-center mb-10">
-        <Title text1={"WHY"} text2={"CHOOSE US"} />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-20">
-        {/* Box 1 */}
-        <div className="bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition duration-300">
-          <h4 className="text-lg sm:text-xl font-semibold mb-3 text-gray-900">
-            Quality Assurance
-          </h4>
-          <p className="text-gray-600 text-sm sm:text-base">
-            We meticulously select and vet each product...
-          </p>
+    <main className="about-page">
+      <section className="about-hero">
+        <div className="about-image">
+          <img
+            src={aboutImage}
+            alt="A shopper carrying a selection of fashion bags"
+          />
+          <span>THE EVERYDAY EDIT / FOREVER</span>
         </div>
 
-        {/* Box 2 */}
-        <div className="bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition duration-300">
-          <h4 className="text-lg sm:text-xl font-semibold mb-3 text-gray-900">
-            Convenience
-          </h4>
-          <p className="text-gray-600 text-sm sm:text-base">
-            With our user-friendly interface and hassle-free ordering...
+        <div className="about-story">
+          <p className="about-kicker">
+            <span>01</span>
+            THE FOREVER STORY
           </p>
+          <h1>
+            Style is a story.
+            <br />
+            <em>Make it yours.</em>
+          </h1>
+          <p>
+            Forever is built around a simple idea: getting dressed should feel
+            effortless, personal, and entirely your own.
+          </p>
+          <p>
+            We bring together everyday favorites and expressive pieces to make
+            finding something that feels like you a little easier.
+          </p>
+          <Link to="/collection" className="about-cta">
+            <span>DISCOVER THE COLLECTION</span>
+            <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+      </section>
+
+      <section className="about-mission">
+        <div className="about-mission-heading">
+          <p className="about-kicker">
+            <span>02</span>
+            WHAT WE BELIEVE
+          </p>
+          <h2>
+            Good style should feel <em>like you.</em>
+          </h2>
         </div>
 
-        {/* Box 3 */}
-        <div className="bg-white border border-gray-100 rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition duration-300">
-          <h4 className="text-lg sm:text-xl font-semibold mb-3 text-gray-900">
-            Exceptional Customer Service
-          </h4>
-          <p className="text-gray-600 text-sm sm:text-base">
-            Our team of dedicated professionals is here to assist you...
+        <div className="about-values">
+          <p className="about-mission-copy">
+            Our mission is to make discovering your next favorite feel
+            thoughtful and easy, with a considered edit, a straightforward
+            shopping experience, and support whenever you need it.
           </p>
-        </div>
-      </div>
 
-      {/* Newsletter Section */}
+          <div className="about-values-grid">
+            <article>
+              <span>01 / THE EDIT</span>
+              <h3>Considered pieces</h3>
+              <p>
+                A mix of easy-to-wear essentials and styles with a point of
+                view.
+              </p>
+            </article>
+            <article>
+              <span>02 / YOUR STYLE</span>
+              <h3>Always personal</h3>
+              <p>
+                No rules to follow—just pieces to make your own, day after day.
+              </p>
+            </article>
+            <article>
+              <span>03 / HERE TO HELP</span>
+              <h3>A little more care</h3>
+              <p>
+                From choosing a look to questions after you order, we’re here
+                for you.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <NewsletterBox />
-    </div>
+    </main>
   );
 };
 
