@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
-import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 
 const Collection = () => {
@@ -79,84 +78,88 @@ const Collection = () => {
   }, [sortType]);
 
   return (
-    <div className="flex flex-col sm:flex-row gap-6 pt-16 px-4 max-w-7xl mx-auto">
-      {/* Sidebar Filter */}
-      <aside className="min-w-[200px]">
-        <p
+    <main className="collection-page">
+      <aside className="collection-sidebar">
+        <button
+          type="button"
+          aria-expanded={showFilter}
           onClick={() => setShowFilter(!showFilter)}
-          className="text-xl font-semibold mb-4 flex items-center justify-between cursor-pointer sm:cursor-default sm:mb-6 text-pink-600"
+          className="collection-filter-toggle"
         >
-          Filters
+          <span>
+            <small>REFINE YOUR EDIT</small>
+            <strong>Filters</strong>
+          </span>
           <img
-            className={`h-3 sm:hidden transition-transform duration-300 ${
+            className={`collection-filter-arrow sm:hidden transition-transform duration-300 ${
               showFilter ? "rotate-90" : ""
             }`}
             src={assets.dropdown_icon}
             alt=""
           />
-        </p>
+        </button>
 
-        {/* Category */}
-        <div
-          className={`transition-all ${
-            showFilter ? "block" : "hidden"
-          } sm:block border-t pt-4 border-gray-200`}
-        >
-          <p className="text-sm font-semibold text-pink-600 mb-3">CATEGORIES</p>
-          <div className="flex flex-col gap-2 text-sm text-gray-700">
-            {["Men", "Women", "Kids"].map((label) => (
-              <label key={label} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  value={label}
-                  onChange={toggleCategory}
-                  className="accent-pink-500 cursor-pointer"
-                />
-                {label}
-              </label>
-            ))}
+        <div className={`collection-filter-panel ${showFilter ? "is-open" : ""}`}>
+          <div className="collection-filter-group">
+            <p className="collection-filter-label">CATEGORY</p>
+            <div className="collection-filter-options">
+              {["Men", "Women", "Kids"].map((label) => (
+                <label key={label}>
+                  <input
+                    type="checkbox"
+                    value={label}
+                    onChange={toggleCategory}
+                  />
+                  <span>{label}</span>
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* SubCategory */}
-        <div
-          className={`transition-all mt-6 ${
-            showFilter ? "block" : "hidden"
-          } sm:block border-t pt-4 border-gray-200`}
-        >
-          <p className="text-sm font-semibold text-pink-600 mb-3">TYPE</p>
-          <div className="flex flex-col gap-2 text-sm text-gray-700">
-            {["Topwear", "Bottomwear", "Winterwear"].map((label) => (
-              <label key={label} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  value={label}
-                  onChange={toggleSubCategory}
-                  className="accent-pink-500 cursor-pointer"
-                />
-                {label}
-              </label>
-            ))}
+          <div className="collection-filter-group">
+            <p className="collection-filter-label">TYPE</p>
+            <div className="collection-filter-options">
+              {["Topwear", "Bottomwear", "Winterwear"].map((label) => (
+                <label key={label}>
+                  <input
+                    type="checkbox"
+                    value={label}
+                    onChange={toggleSubCategory}
+                  />
+                  <span>{label}</span>
+                </label>
+              ))}
+            </div>
           </div>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <Title text1={"ALL"} text2={"COLLECTIONS"} />
-          <select
-            onChange={(e) => setSortType(e.target.value)}
-            className="cursor-pointer border border-pink-500 text-sm rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-700"
-          >
-            <option value="relavent">Sort by: Relevant</option>
-            <option value="low-high">Sort by: Low to High</option>
-            <option value="high-low">Sort by: High to Low</option>
-          </select>
+      <section className="collection-content">
+        <div className="collection-heading">
+          <div>
+            <p className="collection-kicker">THE FOREVER EDIT</p>
+            <h1>
+              All <em>collections.</em>
+            </h1>
+          </div>
+          <div className="collection-sort">
+            <span className="collection-product-count">
+              {filterProducts.length} PIECES
+            </span>
+            <label htmlFor="collection-sort">SORT BY</label>
+            <select
+              id="collection-sort"
+              onChange={(e) => setSortType(e.target.value)}
+              value={sortType}
+            >
+              <option value="relavent">Relevant</option>
+              <option value="low-high">Price: Low to High</option>
+              <option value="high-low">Price: High to Low</option>
+            </select>
+          </div>
         </div>
 
-        {/* Products */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="collection-product-grid">
           {filterProducts.length > 0 ? (
             filterProducts.map((item, index) => (
               <ProductItem
@@ -168,13 +171,14 @@ const Collection = () => {
               />
             ))
           ) : (
-            <p className="text-center col-span-full text-gray-400">
-              No products found.
-            </p>
+            <div className="collection-empty">
+              <span>THE EDIT IS QUIET</span>
+              <p>No pieces found. Try adjusting your filters.</p>
+            </div>
           )}
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 };
 
