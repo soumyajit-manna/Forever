@@ -1,13 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import CartTotal from "../components/CartTotal";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Cart = () => {
-  const { products, currency, cartItems, updateQuantity, navigate } =
-    useContext(ShopContext);
+  const {
+    products,
+    currency,
+    cartItems,
+    updateQuantity,
+    navigate,
+    getCartCount,
+  } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
+
+  const handleCheckout = () => {
+    if (getCartCount() === 0) {
+      toast.info("Your cart is empty right now. Add an item before checkout.");
+      return;
+    }
+
+    navigate("/place-order");
+  };
 
   useEffect(() => {
     if (products.length > 0) {
@@ -113,7 +129,7 @@ const Cart = () => {
           <CartTotal />
           <button
             type="button"
-            onClick={() => navigate("/place-order")}
+            onClick={handleCheckout}
             className="cart-checkout-button"
           >
             <span>PROCEED TO CHECKOUT</span>
