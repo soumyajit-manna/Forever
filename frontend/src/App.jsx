@@ -99,7 +99,20 @@ const App = () => {
         )}
       </AnimatePresence>
       <div className='site-shell' aria-busy={isLoading}>
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={4200}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+          theme="light"
+          className="forever-toast-container"
+          toastClassName="forever-toast"
+          bodyClassName="forever-toast-body"
+          progressClassName="forever-toast-progress"
+        />
         <Navbar />
         <SearchBar />
         <div className='route-content' ref={pageRef} key={location.pathname}>
