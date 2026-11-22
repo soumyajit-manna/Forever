@@ -1,6 +1,6 @@
-import React from "react";
-import { FaQuoteLeft } from "react-icons/fa";
-import Title from "./Title";
+import { useState } from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import TypewriterText from "./TypewriterText";
 
 const testimonials = [
   {
@@ -20,40 +20,80 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
-  return (
-    <div className=" py-20 px-6 md:px-16">
-      <div className="text-center mb-12">
-        <Title text1="What Our" text2="Clients Say" />
-        <p className="mt-2 text-gray-500">
-          Hear from fashion icons who love ForeverYou
-        </p>
-      </div>
+  const [activeIndex, setActiveIndex] = useState(0);
 
-      <div className="grid md:grid-cols-2 gap-10">
-        {testimonials.map((testimonial, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-3xl p-8 shadow-lg border border-yellow-400 hover:border-yellow-500 hover:shadow-xl transition duration-300"
-          >
-            <FaQuoteLeft className="text-pink-500 text-3xl mb-4" />
-            <p className="text-gray-700 text-lg mb-6">
-              "{testimonial.message}"
+  return (
+    <section className="testimonial-section">
+      <div className="testimonial-inner">
+        <div className="testimonial-heading">
+          <div>
+            <p className="testimonial-kicker">
+              <span>05</span>
+              NOTES FROM THE COMMUNITY
             </p>
-            <div className="flex items-center gap-4">
-              <img
-                src={testimonial.image}
-                alt={testimonial.name}
-                className="w-14 h-14 object-cover rounded-full border-2 border-pink-300"
-              />
-              <div>
-                <h4 className="font-semibold">{testimonial.name}</h4>
-                <p className="text-sm text-gray-500">{testimonial.title}</p>
-              </div>
-            </div>
+            <h2>
+              What our <em>clients say.</em>
+            </h2>
           </div>
-        ))}
+          <p className="testimonial-intro">
+            Style is personal. Here are a few words from customers who make
+            ForeverYou their own.
+          </p>
+        </div>
+
+        <div className="testimonial-carousel">
+          <button
+            type="button"
+            className="testimonial-nav-button"
+            aria-label="Show previous client review"
+            onClick={() =>
+              setActiveIndex(
+                (index) => (index + testimonials.length - 1) % testimonials.length,
+              )
+            }
+          >
+            <FiChevronLeft aria-hidden="true" />
+          </button>
+          <div className="testimonial-grid">
+            {testimonials.map((testimonial, index) => (
+              <article
+                className={`testimonial-card${index === activeIndex ? " testimonial-card--active" : ""}`}
+                key={testimonial.name}
+              >
+                <div className="testimonial-card-top">
+                  <span>CLIENT NOTE</span>
+                  <span>0{index + 1}</span>
+                </div>
+                <span className="testimonial-quote-mark" aria-hidden="true">
+                  “
+                </span>
+                <TypewriterText
+                  as="p"
+                  className="testimonial-message"
+                  text={testimonial.message}
+                  delay={index * 850}
+                />
+                <div className="testimonial-person">
+                  <img src={testimonial.image} alt={testimonial.name} />
+                  <div>
+                    <h3>{testimonial.name}</h3>
+                    <p>{testimonial.title}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="testimonial-nav-button"
+            aria-label="Show next client review"
+            onClick={() => setActiveIndex((index) => (index + 1) % testimonials.length)}
+          >
+            <FiChevronRight aria-hidden="true" />
+          </button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
