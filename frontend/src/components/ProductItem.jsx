@@ -9,16 +9,16 @@ const ProductItem = ({ id, image, name, price }) => {
     <Link
       onClick={() => scrollTo(0, 0)}
       to={`/product/${id}`}
-      className="block bg-white rounded-xl overflow-hidden shadow hover:shadow-md transition-shadow duration-300"
+      className="product-card block overflow-hidden"
     >
-      <div className="overflow-hidden">
+      <div className="overflow-hidden bg-[#efede7]">
         <img
           src={image[0]}
           alt={name}
-          className="w-full h-60 object-cover transition-transform duration-300 hover:scale-105"
+          className="product-card-image w-full object-cover"
         />
       </div>
-      <div className="p-3">
+      <div className="product-card-copy">
         <p className="text-sm text-gray-700 font-medium truncate">{name}</p>
         <p className="text-sm font-semibold text-red-600 mt-1">
           {currency}
