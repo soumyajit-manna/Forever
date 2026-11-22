@@ -102,7 +102,7 @@ const PlaceOrder = () => {
           );
           if (response.data.success) {
             setCartItems({});
-            navigate("/orders");
+            navigate("/verify?method=cod");
           } else {
             toast.error(response.data.message);
           }
