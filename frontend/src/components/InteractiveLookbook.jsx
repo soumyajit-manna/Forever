@@ -1,63 +1,85 @@
 import React from "react";
-import Title from "./Title"; // adjust the path as per your file structure
-import summerVibes from "../assets/lookbook/summer-vibes.jpg";
-import urbanStreet from "../assets/lookbook/urban-street.jpg";
-import classicElegance from "../assets/lookbook/classic-elegance.jpg";
-import workChic from "../assets/lookbook/work-chic.jpg";
+import { Link } from "react-router-dom";
+import { FiArrowUpRight } from "react-icons/fi";
+import cityLayers from "../assets/lookbook/summer-edit.jpg";
+import colorPop from "../assets/lookbook/city-style.jpg";
+import streetIcons from "../assets/lookbook/modern-classics.jpg";
+import afterHours from "../assets/lookbook/studio-look.jpg";
 
 const lookbookItems = [
   {
-    title: "Summer Vibes",
-    subtitle: "Light & Breezy",
-    image: summerVibes,
+    title: "City Layers",
+    subtitle: "Tailored for now",
+    image: cityLayers,
   },
   {
-    title: "Urban Street",
-    subtitle: "Bold & Raw",
-    image: urbanStreet,
+    title: "Color Pop",
+    subtitle: "Make a statement",
+    image: colorPop,
   },
   {
-    title: "Classic Elegance",
-    subtitle: "Timeless Looks",
-    image: classicElegance,
+    title: "Street Icons",
+    subtitle: "Off-duty energy",
+    image: streetIcons,
   },
   {
-    title: "Work Chic",
-    subtitle: "Smart & Stylish",
-    image: workChic,
+    title: "After Hours",
+    subtitle: "Unexpected details",
+    image: afterHours,
   },
 ];
 
 const InteractiveLookbook = () => {
   return (
-    <div className="py-20 px-4 md:px-12">
-      <div className="text-center mb-12 text-3xl">
-        <Title text1="INTERACTIVE" text2="LOOKBOOK" />
-        <p className="text-gray-500 text-sm md:text-base max-w-xl mx-auto mt-2 text-center">
-          Explore the latest styles curated just for you. Click on a collection
-          to discover more.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {lookbookItems.map((item, index) => (
-          <div
-            key={index}
-            className="relative overflow-hidden rounded-2xl shadow-md group cursor-pointer"
-          >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-[400px] object-cover transform group-hover:scale-110 transition duration-500"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300">
-              <h3 className="text-white text-xl font-bold">{item.title}</h3>
-              <p className="text-pink-400">{item.subtitle}</p>
-            </div>
+    <section className="lookbook-section">
+      <div className="lookbook-inner">
+        <div className="lookbook-heading">
+          <div>
+            <p className="lookbook-kicker">
+              <span>02</span>
+              THE STYLE JOURNAL
+            </p>
+            <h2>
+              A look for <em>every mood.</em>
+            </h2>
           </div>
-        ))}
+          <div className="lookbook-aside">
+            <p>
+              Four style stories. A few fresh ways to wear what you love. Pick
+              a mood and make it your own.
+            </p>
+            <Link to="/collection" className="lookbook-cta">
+              <span>EXPLORE THE COLLECTION</span>
+              <span className="lookbook-arrow">
+                <FiArrowUpRight aria-hidden="true" />
+              </span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="lookbook-grid">
+          {lookbookItems.map((item, index) => (
+            <Link
+              to="/collection"
+              key={item.title}
+              aria-label={`Shop the ${item.title} edit`}
+              className={`lookbook-card lookbook-card--${index + 1} group`}
+            >
+              <img src={item.image} alt={item.title} />
+              <span className="lookbook-number" aria-hidden="true">
+                0{index + 1}
+              </span>
+              <div className="lookbook-copy">
+                <h3>{item.title}</h3>
+                <p>
+                  {item.subtitle} <span aria-hidden="true">— SHOP THIS EDIT</span>
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
