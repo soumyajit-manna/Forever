@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import Title from "../components/Title";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
   const { backendUrl, token, currency } = useContext(ShopContext);
@@ -39,75 +39,89 @@ const Orders = () => {
   }, [token]);
 
   return (
-    <div className="border-t pt-16 px-4 sm:px-8">
-      <div className="text-3xl font-semibold mb-10 text-center">
-        <Title text1="MY" text2="ORDERS" />
-      </div>
+    <main className="orders-page">
+      <header className="orders-heading">
+        <div>
+          <p>THE FOREVER ACCOUNT</p>
+          <h1>
+            My <em>orders.</em>
+          </h1>
+        </div>
+        <span>{orderData.length.toString().padStart(2, "0")} ITEMS</span>
+      </header>
 
-      <div className="space-y-6">
-        {orderData.map((item, index) => (
-          <div
-            key={index}
-            className="transition-all duration-300 hover:shadow-lg hover:border-blue-400 bg-white border rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
-          >
-            <div className="flex items-start gap-5 text-gray-800 text-sm md:text-base w-full md:w-2/3">
+      <section className="orders-list" aria-label="Your orders">
+        {orderData.length > 0 ? (
+          orderData.map((item, index) => (
+            <article className="order-card" key={index}>
               <img
-                className="w-20 h-20 object-cover rounded-lg shadow-md border"
+                className="order-card-image"
                 src={item.image[0]}
                 alt={item.name}
               />
-              <div className="space-y-1">
-                <p className="font-semibold text-lg">{item.name}</p>
-                <div className="flex flex-wrap gap-4 text-gray-600 text-sm">
+
+              <div className="order-card-details">
+                <p className="order-card-kicker">
+                  ORDER ITEM / {String(index + 1).padStart(2, "0")}
+                </p>
+                <h2>{item.name}</h2>
+                <div className="order-card-meta">
                   <p>
-                    Price:{" "}
-                    <span className="font-medium">
+                    <span>PRICE</span>
+                    <strong>
                       {currency}
                       {item.price}
-                    </span>
+                    </strong>
                   </p>
-                  <p>Qty: {item.quantity}</p>
-                  <p>Size: {item.size}</p>
+                  <p>
+                    <span>QUANTITY</span>
+                    <strong>{item.quantity}</strong>
+                  </p>
+                  <p>
+                    <span>SIZE</span>
+                    <strong>{item.size}</strong>
+                  </p>
+                  <p>
+                    <span>PAYMENT</span>
+                    <strong>{item.paymentMethod}</strong>
+                  </p>
                 </div>
-                <p>
-                  Date:{" "}
-                  <span className="text-gray-500">
-                    {new Date(item.date).toDateString()}
-                  </span>
-                </p>
-                <p>
-                  Payment:{" "}
-                  <span className="text-gray-500">{item.paymentMethod}</span>
+                <p className="order-card-date">
+                  ORDERED <span>{new Date(item.date).toDateString()}</span>
                 </p>
               </div>
-            </div>
 
-            <div className="flex flex-col items-start gap-3 md:items-end md:w-1/3">
-              <div className="flex items-center gap-2 text-sm font-medium">
+              <div className="order-card-actions">
                 <span
-                  className={`w-3 h-3 rounded-full ${
+                  className={`order-status ${
                     item.status === "Delivered"
-                      ? "bg-green-500"
+                      ? "is-delivered"
                       : item.status === "Pending"
-                      ? "bg-yellow-400"
+                      ? "is-pending"
                       : item.status === "Cancelled"
-                      ? "bg-red-500"
-                      : "bg-gray-400"
+                      ? "is-cancelled"
+                      : ""
                   }`}
-                ></span>
-                <p className="capitalize">{item.status}</p>
+                >
+                  {item.status}
+                </span>
+                <button type="button" onClick={loadOrderData}>
+                  UPDATE STATUS
+                  <span aria-hidden="true">↗</span>
+                </button>
               </div>
-              <button
-                onClick={loadOrderData}
-                className="px-5 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 text-sm shadow-md transition"
-              >
-                Track Order
-              </button>
-            </div>
+            </article>
+          ))
+        ) : (
+          <div className="orders-empty">
+            <span>NO ORDER NOTES YET</span>
+            <h2>Your next favorite is waiting to be found.</h2>
+            <p>Your purchases and delivery updates will appear here.</p>
+            <Link to="/collection">EXPLORE THE COLLECTION</Link>
           </div>
-        ))}
-      </div>
-    </div>
+        )}
+      </section>
+    </main>
   );
 };
 
