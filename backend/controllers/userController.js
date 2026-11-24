@@ -2,7 +2,8 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
-import sendMail from "../config/nodemailer.js";
+import sendMail from "../config/emailjs.js";
+import { buildWelcomeEmail } from "../utils/emailTemplates.js";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -63,14 +64,13 @@ const registerUser = async (req, res) => {
 
     const token = createToken(user._id);
 
-    // ✅ Send email after registration
-    await sendMail(
+    const emailSent = await sendMail(
       email,
-      "Welcome to FOREVER Fashion!",
-      `<h2>Hello ${name},</h2><p>Thanks for signing up at <strong>FOREVER Fashion</strong>. Enjoy shopping with us!</p>`
+      "Welcome to FOREVER — Style that stays",
+      buildWelcomeEmail(name)
     );
 
-    res.json({ success: true, token });
+    res.json({ success: true, token, emailSent });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });

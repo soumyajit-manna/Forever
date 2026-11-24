@@ -2,7 +2,8 @@ import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import Stripe from "stripe";
 import razorpay from "razorpay";
-import sendMail from "../config/nodemailer.js";
+import sendMail from "../config/emailjs.js";
+import { buildOrderEmail } from "../utils/emailTemplates.js";
 
 const currency = "inr";
 const deliveryCharge = 10;
@@ -12,36 +13,6 @@ const razorpayInstance = new razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-
-// 📦 Helper: Generate product summary HTML
-const generateProductHTML = (items) => {
-  return `
-    <table border="1" cellpadding="8" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Product ID</th>
-          <th>Name</th>
-          <th>Qty</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${items
-          .map(
-            (item) => `
-          <tr>
-            <td>${item._id}</td>
-            <td>${item.name}</td>
-            <td>${item.quantity}</td>
-            <td>₹${item.price}</td>
-          </tr>
-        `
-          )
-          .join("")}
-      </tbody>
-    </table>
-  `;
-};
 
 // ✅ COD Order
 const placeOrder = async (req, res) => {
@@ -63,17 +34,21 @@ const placeOrder = async (req, res) => {
     await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
     const user = await userModel.findById(userId);
-    const productHTML = generateProductHTML(items);
 
-    await sendMail(
+    const emailSent = await sendMail(
       user.email,
-      "Order Confirmed - FOREVER Fashion",
-      `<h2>Hello ${user.name},</h2>
-       <p>Your order <strong>#${newOrder._id}</strong> has been placed using <b>Cash on Delivery</b>.</p>
-       ${productHTML}`
+      `Order confirmed — #${newOrder._id}`,
+      buildOrderEmail({
+        customerName: user.name,
+        order: newOrder,
+        eyebrow: "ORDER CONFIRMED",
+        title: "Your FOREVER edit is in motion.",
+        message:
+          "Your order is confirmed. We’ll keep you posted as it makes its way to you.",
+      })
     );
 
-    res.json({ success: true, message: "Order Placed" });
+    res.json({ success: true, message: "Order Placed", emailSent });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -141,17 +116,21 @@ const verifyStripe = async (req, res) => {
 
       const user = await userModel.findById(userId);
       const order = await orderModel.findById(orderId);
-      const productHTML = generateProductHTML(order.items);
 
-      await sendMail(
+      const emailSent = await sendMail(
         user.email,
-        "Payment Successful - FOREVER Fashion",
-        `<h2>Hello ${user.name},</h2>
-         <p>Your payment for order <strong>#${orderId}</strong> was successful.</p>
-         ${productHTML}`
+        `Payment confirmed — #${orderId}`,
+        buildOrderEmail({
+          customerName: user.name,
+          order,
+          eyebrow: "PAYMENT CONFIRMED",
+          title: "Your order is now in motion.",
+          message:
+            "We’ve received your payment. Here’s your order recap, all in one place.",
+        })
       );
 
-      res.json({ success: true });
+      res.json({ success: true, emailSent });
     } else {
       await orderModel.findByIdAndDelete(orderId);
       res.json({ success: false });
@@ -211,17 +190,21 @@ const verifyRazorpay = async (req, res) => {
 
       const user = await userModel.findById(userId);
       const order = await orderModel.findById(orderInfo.receipt);
-      const productHTML = generateProductHTML(order.items);
 
-      await sendMail(
+      const emailSent = await sendMail(
         user.email,
-        "Payment Confirmed - FOREVER Fashion",
-        `<h2>Hi ${user.name},</h2>
-         <p>Your Razorpay payment for order <strong>#${orderInfo.receipt}</strong> was successful.</p>
-         ${productHTML}`
+        `Payment confirmed — #${orderInfo.receipt}`,
+        buildOrderEmail({
+          customerName: user.name,
+          order,
+          eyebrow: "PAYMENT CONFIRMED",
+          title: "Your order is now in motion.",
+          message:
+            "We’ve received your payment. Here’s your order recap, all in one place.",
+        })
       );
 
-      res.json({ success: true, message: "Payment Successful" });
+      res.json({ success: true, message: "Payment Successful", emailSent });
     } else {
       res.json({ success: false, message: "Payment Failed" });
     }
@@ -263,17 +246,20 @@ const updateStatus = async (req, res) => {
 
     const order = await orderModel.findById(orderId);
     const user = await userModel.findById(order.userId);
-    const productHTML = generateProductHTML(order.items);
 
-    await sendMail(
+    const emailSent = await sendMail(
       user.email,
-      "Delivery Status Update - FOREVER Fashion",
-      `<h2>Hello ${user.name},</h2>
-       <p>The delivery status of your order <strong>#${orderId}</strong> has been updated to <b>${status}</b>.</p>
-       ${productHTML}`
+      `Order update — #${orderId}`,
+      buildOrderEmail({
+        customerName: user.name,
+        order,
+        eyebrow: "A NOTE ON YOUR ORDER",
+        title: "Your order has a new update.",
+        message: `The latest update is ${order.status}. Your full order details are below.`,
+      })
     );
 
-    res.json({ success: true, message: "Status Updated" });
+    res.json({ success: true, message: "Status Updated", emailSent });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
