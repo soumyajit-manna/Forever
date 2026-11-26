@@ -1,74 +1,96 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { backendUrl } from "../App";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { backendUrl } from "../config";
 import { toast } from "react-toastify";
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+
     try {
       const response = await axios.post(`${backendUrl}/api/user/admin`, {
         email,
         password,
       });
+
       if (response.data.success) {
         setToken(response.data.token);
-        toast.success("Login Successful");
+        toast.success("Welcome back to FOREVER.");
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pink-50 px-4">
-      <div className="bg-white shadow-xl rounded-2xl px-8 py-6 w-full max-w-sm">
-        <h1 className="text-3xl font-bold text-pink-600 mb-6 text-center">
-          Admin Login
-        </h1>
-        <form onSubmit={onSubmitHandler}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
+    <main className="admin-login">
+      <section className="admin-login-story">
+        <p className="admin-login-brand">
+          FOR<span className="admin-wordmark-accent">EVER</span>
+          <span className="admin-wordmark-period">.</span>
+        </p>
+        <div className="admin-login-story-copy">
+          <p className="admin-eyebrow">THE FOREVER EDIT / ADMIN</p>
+          <h1>Good style,<br /><em>well managed.</em></h1>
+          <p>One considered space for the pieces, orders and people behind the FOREVER edit.</p>
+        </div>
+        <p className="admin-login-story-foot">GOOD STYLE. GOOD DAYS. <span>01 — 03</span></p>
+      </section>
+
+      <section className="admin-login-panel">
+        <div className="admin-login-card">
+          <p className="admin-eyebrow">STORE OPERATIONS / 01</p>
+          <h2>Welcome <em>back.</em></h2>
+          <p className="admin-login-intro">Sign in to pick up where you left off.</p>
+
+          <form onSubmit={onSubmitHandler} className="admin-login-form">
+            <label className="admin-field">
+              <span>EMAIL ADDRESS</span>
+              <input
+                autoComplete="username"
+                type="email"
+                placeholder="you@forever.com"
+                required
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
             </label>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
+            <label className="admin-field">
+              <span>PASSWORD</span>
+              <input
+                autoComplete="current-password"
+                type="password"
+                placeholder="Enter your password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
             </label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 rounded-md bg-pink-600 hover:bg-pink-700 text-white font-semibold transition duration-300"
-          >
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
+            <button className="admin-primary-button" type="submit" disabled={isSubmitting}>
+              <span>{isSubmitting ? "SIGNING IN..." : "SIGN IN"}</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+
+          <p className="admin-login-footnote">PRIVATE STORE ACCESS <span>FOREVER / 01</span></p>
+        </div>
+      </section>
+    </main>
   );
+};
+
+Login.propTypes = {
+  setToken: PropTypes.func.isRequired,
 };
 
 export default Login;

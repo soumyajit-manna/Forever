@@ -1,48 +1,34 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
-import { assets } from "../assets/assets";
 
-const Sidebar = () => {
-  const navLinkClasses =
-    "flex items-center gap-3 px-4 py-2 rounded-l-full transition-all duration-300 font-medium hover:bg-pink-100 hover:text-pink-600";
+const links = [
+  { to: "/add", number: "01", label: "Add product" },
+  { to: "/list", number: "02", label: "Catalogue" },
+  { to: "/orders", number: "03", label: "Orders" },
+];
 
-  const activeClassName = "bg-pink-500 text-white hover:bg-pink-600";
-
-  return (
-    <div className="w-[18%] min-h-screen bg-pink-50 shadow-lg border-r border-pink-200">
-      <div className="flex flex-col gap-4 pt-10 pl-6 text-[15px]">
+const Sidebar = () => (
+  <aside className="admin-sidebar" aria-label="Store management">
+    <p className="admin-sidebar-label">MANAGEMENT</p>
+    <nav className="admin-nav">
+      {links.map(({ to, number, label }) => (
         <NavLink
-          to="/add"
+          key={to}
+          to={to}
           className={({ isActive }) =>
-            `${navLinkClasses} ${isActive ? activeClassName : ""}`
+            `admin-nav-link${isActive ? " is-active" : ""}`
           }
         >
-          <img className="w-5 h-5" src={assets.add_icon} alt="Add Icon" />
-          <p className="hidden md:block">Add Items</p>
+          <span className="admin-nav-number">{number}</span>
+          <span className="admin-nav-label">{label}</span>
+          <span className="admin-nav-arrow" aria-hidden="true">↗</span>
         </NavLink>
-
-        <NavLink
-          to="/list"
-          className={({ isActive }) =>
-            `${navLinkClasses} ${isActive ? activeClassName : ""}`
-          }
-        >
-          <img className="w-5 h-5" src={assets.order_icon} alt="List Icon" />
-          <p className="hidden md:block">List Items</p>
-        </NavLink>
-
-        <NavLink
-          to="/orders"
-          className={({ isActive }) =>
-            `${navLinkClasses} ${isActive ? activeClassName : ""}`
-          }
-        >
-          <img className="w-5 h-5" src={assets.order_icon} alt="Orders Icon" />
-          <p className="hidden md:block">Orders</p>
-        </NavLink>
-      </div>
+      ))}
+    </nav>
+    <div className="admin-sidebar-note">
+      <span className="admin-sidebar-dot" />
+      <span>GOOD STYLE. GOOD DAYS.</span>
     </div>
-  );
-};
+  </aside>
+);
 
 export default Sidebar;

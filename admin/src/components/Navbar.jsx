@@ -1,13 +1,32 @@
-import React from 'react'
-import {assets} from '../assets/assets'
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const Navbar = ({setToken}) => {
+const Navbar = ({ setToken }) => {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+  };
+
   return (
-    <div className='flex items-center py-2 px-[4%] justify-between'>
-        <img className='w-[max(10%,80px)]' src={assets.logo} alt="" />
-        <button onClick={()=>setToken('')} className='bg-gray-600 text-white px-5 py-2 sm:px-7 sm:py-2 rounded-full text-xs sm:text-sm'>Logout</button>
-    </div>
-  )
-}
+    <header className="admin-topbar">
+      <Link className="admin-wordmark" to="/add" aria-label="FOREVER admin home">
+        FOR<span className="admin-wordmark-accent">EVER</span>
+        <span className="admin-wordmark-period">.</span>
+      </Link>
+      <div className="admin-topbar-copy">
+        <span>THE FOREVER EDIT</span>
+        <strong>STORE ADMINISTRATION</strong>
+      </div>
+      <button className="admin-logout" type="button" onClick={handleLogout}>
+        <span>LOG OUT</span>
+        <span aria-hidden="true">↗</span>
+      </button>
+    </header>
+  );
+};
 
-export default Navbar
+Navbar.propTypes = {
+  setToken: PropTypes.func.isRequired,
+};
+
+export default Navbar;
