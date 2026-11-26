@@ -1,6 +1,6 @@
 # FOREVER
 
-FOREVER is a full-stack fashion e-commerce project with a customer storefront, a separate store-admin application, and a shared REST API. It is developed as a B.Tech CSE final-year project.
+FOREVER is a full-stack fashion e-commerce project with a customer storefront, a separate store-admin application, and a shared REST API.
 
 ## Applications
 
@@ -174,11 +174,8 @@ These URLs were supplied for this project. Their current availability and produc
 
 ## Developer
 
-**Soumyajit Manna** — Final Year B.Tech (CSE) Student · Full Stack Web Developer
+- Portfolio: <https://soumyajit-tech-portfolio.vercel.app>
 
-- Portfolio: <https://soumyajit-dev-portfolio.vercel.app>
-- GitHub: <https://github.com/soumyajit-manna>
-- LinkedIn: <https://www.linkedin.com/in/soumyajit-manna-731372270>
 
 ## License
 
