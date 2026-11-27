@@ -1,28 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import ProductItem from "./ProductItem";
 import { Link } from "react-router-dom";
 import { FiArrowUpRight } from "react-icons/fi";
 
 const BestSeller = () => {
-  const { products } = useContext(ShopContext);
-  const [bestSeller, setBestSeller] = useState([]);
+  const { products, productsLoading } = useContext(ShopContext);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 640);
 
   useEffect(() => {
-    const updateBestSellers = () => {
-      const isMobile = window.innerWidth <= 640; // Tailwind's sm: is 640px
-      const bestProduct = products.filter((item) => item.bestseller);
-      const slicedProducts = isMobile
-        ? bestProduct.slice(0, 6)
-        : bestProduct.slice(0, 5);
-      setBestSeller(slicedProducts);
+    const updateScreenSize = () => {
+      setIsMobile(window.innerWidth <= 640);
     };
 
-    updateBestSellers(); // run once on mount or when products change
+    window.addEventListener("resize", updateScreenSize);
+    return () => window.removeEventListener("resize", updateScreenSize);
+  }, []);
 
-    window.addEventListener("resize", updateBestSellers);
-    return () => window.removeEventListener("resize", updateBestSellers);
-  }, [products]);
+  const bestSeller = products
+    .filter((item) => item.bestseller)
+    .slice(0, isMobile ? 6 : 5);
 
   return (
     <section className="bestseller-section">
@@ -53,7 +50,12 @@ const BestSeller = () => {
         </div>
 
         <div className="bestseller-product-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-          {bestSeller.map((item, index) => (
+          {productsLoading ? (
+            <div className="products-loading" role="status">
+              <span className="products-loading-spinner" aria-hidden="true" />
+              <p>Finding the pieces everyone loves...</p>
+            </div>
+          ) : bestSeller.map((item, index) => (
             <ProductItem
               key={index}
               id={item._id}
