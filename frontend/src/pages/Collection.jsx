@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import ProductItem from "../components/ProductItem";
 
 const Collection = () => {
-  const { products, search, showSearch } = useContext(ShopContext);
+  const { products, productsLoading, search, showSearch } =
+    useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
@@ -144,7 +145,7 @@ const Collection = () => {
           </div>
           <div className="collection-sort">
             <span className="collection-product-count">
-              {filterProducts.length} PIECES
+              {productsLoading ? "LOADING PIECES" : `${filterProducts.length} PIECES`}
             </span>
             <label htmlFor="collection-sort">SORT BY</label>
             <select
@@ -160,7 +161,12 @@ const Collection = () => {
         </div>
 
         <div className="collection-product-grid">
-          {filterProducts.length > 0 ? (
+          {productsLoading ? (
+            <div className="products-loading" role="status">
+              <span className="products-loading-spinner" aria-hidden="true" />
+              <p>Loading all pieces in the collection...</p>
+            </div>
+          ) : filterProducts.length > 0 ? (
             filterProducts.map((item, index) => (
               <ProductItem
                 key={index}
