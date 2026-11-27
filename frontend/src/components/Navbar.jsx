@@ -79,7 +79,7 @@ const Navbar = () => {
       {/* Icons */}
       <div className="site-nav-actions flex items-center gap-6">
         <a
-          href="https://forever-admin-seven-lovat.vercel.app"
+          href="https://wear-forever-admin.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
           className="admin-quick-link nav-icon-button"
@@ -220,7 +220,7 @@ const Navbar = () => {
               ))}
 
               <a
-                href="https://forever-admin-seven-lovat.vercel.app"
+                href="https://wear-forever-admin.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mobile-drawer-link mobile-drawer-admin"
